@@ -1,10 +1,10 @@
-package com.sunho.sCompany.space_for_travel.lover;
+package com.sunho.travel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpaceForTravelLoverApplicationTests {
+class TravelerApplicationTests {
 
 	@Test
 	void contextLoads() {

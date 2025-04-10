@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Vite cache
+dist/
+.vite/
+
+# Build output
+*.log
+*.local
+*.env
+*.env.*.local
+
+# Optional: lock file (choose one if using yarn or pnpm)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# VSCode settings (optional, if you don't want to share workspace settings)
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports (if using test coverage tools)
+coverage/
+
+# Optional: Lint/staging cache
+.eslintcache
+
+# macOS-specific
+.AppleDouble
+.LSOverride
+
+# Windows-specific
+Desktop.ini
+$RECYCLE.BIN/
+
+# Typescript (if using)
+*.tsbuildinfo
