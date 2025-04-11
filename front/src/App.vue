@@ -20,7 +20,7 @@ let showFlag = ref(true);
 </script>
 
 <template>
-  <Header />
+  <!-- <Header /> -->
   <router-view></router-view>
 </template>
 <style></style>
