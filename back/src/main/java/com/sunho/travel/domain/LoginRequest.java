@@ -1,4 +1,4 @@
-package com.sunho.travel.dto;
+package com.sunho.travel.domain;
 
 import lombok.Data;
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunho.travel.config.security.userDetails.AppUserDetails;
-import com.sunho.travel.dto.LoginRequest;
+import com.sunho.travel.domain.LoginRequest;
 import com.sunho.travel.util.JwtTokenProvider;
 
 import jakarta.servlet.FilterChain;

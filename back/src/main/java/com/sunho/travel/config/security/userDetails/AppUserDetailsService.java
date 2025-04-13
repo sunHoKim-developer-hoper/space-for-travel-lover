@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.sunho.travel.enrity.user.User;
+import com.sunho.travel.domain.user.User;
 import com.sunho.travel.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, AuthenticationManager authenticationManager ) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider,
+            UserDetailsService userDetailsService, AuthenticationManager authenticationManager) throws Exception {
         http.formLogin(formLogin -> formLogin.disable())
                 .httpBasic(basic -> basic.disable())
                 // 아래의 cors 설정은 DispatcherServlet 이후 처리되는 요청에 적용되는 설정이다. (애초에 들어올 수 있는 요청인지 판단),
@@ -42,12 +45,15 @@ public class SecurityConfig {
                  * 요청을 보내는 공격이다.
                  */
                 .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.frameOptions(o -> o.disable())) //iframe 허용
+                .headers(headers -> headers.frameOptions(o -> o.disable())) // iframe 허용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/login", "/public/**", "/h2-console/**").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/public/**").permitAll()
                         /* .anyRequest().authenticated()를 추가해주면 인증된 사용자만 접근할 수 있도록 제한하는 설정입니다. */
-                        .requestMatchers("/member/**").hasRole("MEMBER")) //
-                .addFilter(new JwtLoginFilter(authenticationManager,jwtTokenProvider))
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/member/**").hasAnyRole("MEMBER", "ADMIN")
+                        //위의 조건에 없는 모든 요청은 403 Forbidden
+                        .anyRequest().denyAll() )
+                .addFilter(new JwtLoginFilter(authenticationManager, jwtTokenProvider))
                 // JwtAuthenticationFilter를 Spring Security의 필터 체인에 추가하면서
                 // UsernamePasswordAuthenticationFilter 바로 전에 실행되도록 등록
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService),
@@ -76,5 +82,12 @@ public class SecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MEMBER");
+        return roleHierarchy;
     }
 }

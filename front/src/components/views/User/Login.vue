@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { apiFetch } from "../../utils/api";
+import { apiFetch } from "../../../utils/api";
 
 const id = ref('');
 const password = ref('');
