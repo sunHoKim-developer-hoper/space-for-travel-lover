@@ -44,3 +44,4 @@ $RECYCLE.BIN/
 
 # Typescript (if using)
 *.tsbuildinfo
+.env

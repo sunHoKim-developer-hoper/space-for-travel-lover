@@ -43,6 +43,13 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON 처리용
+	//redis관련
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+	//WebClient 사용 용도
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	//dotenv사용 용도
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 
 	//h2 DB에서 maria DB로 전환하기 위한 용도
 	//runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
