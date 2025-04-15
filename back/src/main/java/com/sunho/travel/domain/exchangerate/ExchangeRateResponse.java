@@ -1,15 +1,15 @@
 package com.sunho.travel.domain.exchangerate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.Data;
 
 @Data
 public class ExchangeRateResponse {
-    @JsonProperty(value = "cur_unit")
-    private String current;
+    @JsonAlias(value = "cur_unit")
+    private String currency;
 
-    @JsonProperty(value = "deal_bas_r")
+    @JsonAlias(value = "deal_bas_r")
     private String rate;
 
 }

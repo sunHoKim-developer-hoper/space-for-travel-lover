@@ -4,8 +4,6 @@ import static com.sunho.travel.util.DateFormatters.YYYYMMDD;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
@@ -24,21 +22,22 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     @Value("${exchange.rate.auth.key}")
     private String authKey;
 
-    public Map<String, String> callExternalApi() {
+    public List<ExchangeRateResponse> callExternalApi() {
         List<ExchangeRateResponse> exchangeRateExternalResponse = getExchangeRate();
-        return exchangeRateExternalResponse.stream().collect(Collectors.toMap(ExchangeRateResponse::getCurrent,ExchangeRateResponse::getRate));
+        return exchangeRateExternalResponse;
     }
 
     @Override
-    @CachePut(value = "exchangeRateCache", key = "'exchangeRateKey'")
-    public Map<String,String> updateExchangeRates() {
+    @CachePut(value = "exchangeRateCache", key = "'exchangeRates'")
+    public List<ExchangeRateResponse> updateExchangeRates() {
         return callExternalApi();
     }
 
     @Override
-    @Cacheable(value = "exchangeRateCache", key = "'exchangeRateKey'")
-    public Map<String,String> getExchangeRates() {
-        return callExternalApi();
+    @Cacheable(value = "exchangeRateCache", key = "'exchangeRates'") //인자를 넘겨줘서 조회하고 싶으면 '#p0'을 key로 설정해줘야 한다.
+    public List<ExchangeRateResponse> getExchangeRates() {
+        List<ExchangeRateResponse> rates = callExternalApi();
+        return rates;
     }
 
     public List<ExchangeRateResponse> getExchangeRate() {
