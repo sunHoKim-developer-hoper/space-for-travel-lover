@@ -2,6 +2,7 @@ package com.sunho.travel.config.security;
 
 import java.util.Arrays;
 
+import org.springframework.boot.web.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -47,12 +48,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(o -> o.disable())) // iframe 허용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/public/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
                         /* .anyRequest().authenticated()를 추가해주면 인증된 사용자만 접근할 수 있도록 제한하는 설정입니다. */
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/member/**").hasAnyRole("MEMBER", "ADMIN")
-                        //위의 조건에 없는 모든 요청은 403 Forbidden
-                        .anyRequest().denyAll() )
+                        .requestMatchers("/error/**").permitAll()
+                // 위의 조건에 없는 모든 요청은 403 Forbidden
+                )
                 .addFilter(new JwtLoginFilter(authenticationManager, jwtTokenProvider))
                 // JwtAuthenticationFilter를 Spring Security의 필터 체인에 추가하면서
                 // UsernamePasswordAuthenticationFilter 바로 전에 실행되도록 등록
@@ -84,10 +87,4 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MEMBER");
-        return roleHierarchy;
-    }
 }

@@ -1,6 +1,6 @@
 package com.sunho.travel.controller.pub;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,16 +22,17 @@ public class ExchangeRateController {
 
     private final ExchangeRateService exchangeRateService;
 
-    @GetMapping(path = "getRate")
-    public ResponseEntity<List<ExchangeRateResponse>> signUp(@RequestParam(required = false) String currency) { // body가 없으면 Void를 주면 된다.
-            List<ExchangeRateResponse> rates = exchangeRateService.getExchangeRates();
-            if(rates.isEmpty()){
-                return ResponseEntity.ok().body(new ArrayList<ExchangeRateResponse>());
-            }
-            if(currency != null){
-                List<ExchangeRateResponse> rate = rates.stream().filter(o -> Objects.equals(o.getCurrency(), currency)).toList();
-                return ResponseEntity.ok().body(rate);
-            }
-        return ResponseEntity.ok().body(rates);
+    @GetMapping("/getRate")
+    public ResponseEntity<List<ExchangeRateResponse>> getRate(@RequestParam(required = false) String currency) {
+        List<ExchangeRateResponse> rates = exchangeRateService.getExchangeRates();
+
+        if (rates.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        if (currency != null) {
+            rates = rates.stream().filter(o -> Objects.equals(currency, o.getCurrency())).toList();
+        }
+        return ResponseEntity.ok(rates);
     }
 }

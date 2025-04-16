@@ -28,8 +28,10 @@ export async function apiFetch(path, options = {}) {
 
   const response = await fetch(API_BASE_URL + path, fetchOptions);
 
-  if (!response.ok) throw new Error("API 실패");
-  else {
+  if (!response.ok) {
+    const errorText = await response.text(); // 응답 본문 읽기 시도
+    throw new Error(errorText || `HTTP error ${response.status}`);
+  } else {
     const contentType = response.headers.get("content-type");
     //응답에 contentType이 있고 application/json이라면
     const isJson = contentType && contentType.includes("application/json");

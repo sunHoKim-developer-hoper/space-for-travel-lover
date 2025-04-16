@@ -1,23 +1,42 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { apiFetch } from "../../../utils/api";
+import { useUserDetailsStore } from "@/stores/useUserDetailsStore.js";
 
 const id = ref('');
 const password = ref('');
 const router = useRouter();
+const userDetails = useUserDetailsStore();
 
-async function login(){
+//로그인 되어 있는 상태에서 이 화면 호출 시 튕겨내기
+onMounted(() =>{
+  if (userDetails.isAuthenticated){
+    router.push("/index");
+  }
+});
+
+async function login() {
   try {
-    const response = await apiFetch('/auth/login', {
-      method : 'POST',
-      body : JSON.stringify({id : id.value, password :password.value})
-    })
-    localStorage.setItem('accessToken',response.token);
+    const response = await apiFetch('/public/login', {
+      method: 'POST',
+      body: JSON.stringify({ id: id.value, password: password.value })
+    });
+
+    saveStores(response);
+    router.push("/index");
   } catch (error) {
     alert("로그인 실패!!");
   }
 }
+
+const saveStores = (response) => {
+  userDetails.id = response.id;
+  userDetails.role = response.role;
+  localStorage.setItem('accessToken', response.token);
+};
+
+
 </script>
 <template>
   <section>
@@ -25,7 +44,7 @@ async function login(){
       <input v-model="id" type="input">
     </div>
     <div>
-      <input v-model="password" type="password">
+      <input v-model="password" type="password" @keyup.enter="login">
     </div>
 
     <button @click="login">로그인</button>

@@ -1,6 +1,7 @@
 package com.sunho.travel.controller.pub;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import com.sunho.travel.domain.user.UserDto;
 import com.sunho.travel.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/public/user")
@@ -23,4 +25,11 @@ public class UserController {
         userService.signUp(user, "MEMBER");
         return ResponseEntity.status(200).build();
     }
+
+    @GetMapping("test")
+    public String getMethodName() {
+        return new String("성공");
+    }
+    
+
 }

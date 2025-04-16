@@ -16,18 +16,8 @@ public class AppUserDetails implements UserDetails {
 	private String id;
 	private String username;
 	private String password;
-	private String profile;
 	private List<GrantedAuthority> authorities;
 	
-	
-	public String getProfile() {
-		return profile;
-	}
-
-	public void setProfile(String profile) {
-		this.profile = profile;
-	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}

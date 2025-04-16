@@ -18,7 +18,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtTokenProvider {
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1시간
+    private final long EXPIRATION_TIME = 1000 * 60; // 1분
 
     @Value("${jwt.secret.key}")
     private String JWT_SECRETE_KEY;
